@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHIVE 01</title>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: #000;
+    color: #fff;
+    font-family: Helvetica, Arial, sans-serif;
+  }
+
+  header {
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  header h1 {
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    font-weight: 400;
+  }
+
+  header nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 30px;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+  }
+
+  .hero {
+    padding: 100px 40px;
+  }
+
+  .hero h2 {
+    font-size: 6vw;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2px;
+  }
+
+  .item {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: 0.5s ease;
+  }
+
+  .item:hover img {
+    filter: grayscale(0%);
+    transform: scale(1.05);
+  }
+
+  .overlay {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    opacity: 0;
+    transition: 0.4s;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+  }
+
+  .item:hover .overlay {
+    opacity: 1;
+  }
+
+  footer {
+    padding: 40px;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    opacity: 0.6;
+  }
+
+  @media(max-width: 768px){
+    .hero h2 {
+      font-size: 12vw;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>ARCHIVE</h1>
+  <nav>
+    <a href="#">COLLECTION</a>
+    <a href="#">ABOUT</a>
+    <a href="#">CONTACT</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>COLLECTION<br>01</h2>
+</section>
+
+<section class="gallery">
+  <div class="item">
+    <img src="https://images.unsplash.com/photo-1520975922284-9a1b52d63f8f" alt="">
+    <div class="overlay">LOOK 01</div>
+  </div>
+
+  <div class="item">
+    <img src="https://images.unsplash.com/photo-1544441893-675973e31985" alt="">
+    <div class="overlay">LOOK 02</div>
+  </div>
+
+  <div class="item">
+    <img src="https://images.unsplash.com/photo-1519741497674-611481863552" alt="">
+    <div class="overlay">LOOK 03</div>
+  </div>
+
+  <div class="item">
+    <img src="https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93" alt="">
+    <div class="overlay">LOOK 04</div>
+  </div>
+
+  <div class="item">
+    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b" alt="">
+    <div class="overlay">LOOK 05</div>
+  </div>
+
+  <div class="item">
+    <img src="https://images.unsplash.com/photo-1503342217505-b0a15cf70489" alt="">
+    <div class="overlay">LOOK 06</div>
+  </div>
+</section>
+
+<footer>
+  © 2026 ARCHIVE — ALL RIGHTS RESERVED
+</footer>
+
+</body>
+</html
