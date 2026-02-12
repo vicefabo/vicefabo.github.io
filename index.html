@@ -3,156 +3,202 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARCHIVE 01</title>
+<title>Page</title>
+
+<link href="https://fonts.cdnfonts.com/css/helvetica-neue-5" rel="stylesheet">
 
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  body {
-    background: #000;
-    color: #fff;
-    font-family: Helvetica, Arial, sans-serif;
-  }
+body {
+  background: #000;
+  font-family: 'Helvetica Neue', sans-serif;
+  color: white;
+  overflow-x: hidden;
+}
 
-  header {
-    padding: 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+/* ===== GRID ===== */
 
-  header h1 {
-    font-size: 1.2rem;
-    letter-spacing: 3px;
-    font-weight: 400;
-  }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  padding: 80px;
+}
 
-  header nav a {
-    color: white;
-    text-decoration: none;
-    margin-left: 30px;
-    font-size: 0.9rem;
-    letter-spacing: 2px;
-  }
+.box {
+  height: 480px;
+  background: #0a0a0a;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
 
-  .hero {
-    padding: 100px 40px;
-  }
+.box:hover {
+  transform: scale(1.015);
+  opacity: 0.9;
+}
 
-  .hero h2 {
-    font-size: 6vw;
-    font-weight: 500;
-    line-height: 1;
-  }
+.box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2px;
-  }
+/* Coming Soon */
 
-  .item {
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-  }
+.coming {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 4px;
+  font-size: 13px;
+  background: #111;
+}
 
-  .item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: grayscale(100%);
-    transition: 0.5s ease;
-  }
+/* ===== VIEWER ===== */
 
-  .item:hover img {
-    filter: grayscale(0%);
-    transform: scale(1.05);
-  }
+.viewer {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease;
+}
 
-  .overlay {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    opacity: 0;
-    transition: 0.4s;
-    font-size: 0.9rem;
-    letter-spacing: 2px;
-  }
+.viewer img {
+  max-width: 55%;
+  max-height: 75vh;
+  object-fit: contain;
+}
 
-  .item:hover .overlay {
-    opacity: 1;
-  }
+/* BACK BUTTON */
 
-  footer {
-    padding: 40px;
-    font-size: 0.8rem;
-    letter-spacing: 2px;
-    opacity: 0.6;
-  }
+.back {
+  position: absolute;
+  top: 50px;
+  left: 60px;
+  font-size: 13px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
 
-  @media(max-width: 768px){
-    .hero h2 {
-      font-size: 12vw;
-    }
-  }
+.back:hover {
+  opacity: 1;
+}
+
+/* ARROWS */
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 42px;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+  user-select: none;
+}
+
+.arrow:hover {
+  opacity: 1;
+}
+
+.left {
+  left: 60px;
+}
+
+.right {
+  right: 60px;
+}
 </style>
 </head>
 
 <body>
 
-<header>
-  <h1>ARCHIVE</h1>
-  <nav>
-    <a href="#">COLLECTION</a>
-    <a href="#">ABOUT</a>
-    <a href="#">CONTACT</a>
-  </nav>
-</header>
+<div class="grid">
 
-<section class="hero">
-  <h2>COLLECTION<br>01</h2>
-</section>
-
-<section class="gallery">
-  <div class="item">
-    <img src="https://images.unsplash.com/photo-1520975922284-9a1b52d63f8f" alt="">
-    <div class="overlay">LOOK 01</div>
+  <!-- OPENABLE GALLERY -->
+  <div class="box" onclick="openGallery()">
+    <img src="thumbnail1.jpg">
   </div>
 
-  <div class="item">
-    <img src="https://images.unsplash.com/photo-1544441893-675973e31985" alt="">
-    <div class="overlay">LOOK 02</div>
-  </div>
+  <!-- COMING SOON -->
+  <div class="box coming">COMING SOON</div>
+  <div class="box coming">COMING SOON</div>
+  <div class="box coming">COMING SOON</div>
+  <div class="box coming">COMING SOON</div>
+  <div class="box coming">COMING SOON</div>
 
-  <div class="item">
-    <img src="https://images.unsplash.com/photo-1519741497674-611481863552" alt="">
-    <div class="overlay">LOOK 03</div>
-  </div>
+</div>
 
-  <div class="item">
-    <img src="https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93" alt="">
-    <div class="overlay">LOOK 04</div>
-  </div>
+<!-- FULL SCREEN VIEWER -->
 
-  <div class="item">
-    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b" alt="">
-    <div class="overlay">LOOK 05</div>
-  </div>
+<div class="viewer" id="viewer">
 
-  <div class="item">
-    <img src="https://images.unsplash.com/photo-1503342217505-b0a15cf70489" alt="">
-    <div class="overlay">LOOK 06</div>
-  </div>
-</section>
+  <div class="back" onclick="closeGallery()">BACK</div>
 
-<footer>
-  © 2026 ARCHIVE — ALL RIGHTS RESERVED
-</footer>
+  <div class="arrow left" onclick="prevImage()">‹</div>
+
+  <img id="viewerImage" src="image1.jpg">
+
+
+  <div class="arrow right" onclick="nextImage()">›</div>
+
+</div>
+
+<script>
+let images = [
+  "look1.jpg",
+  "look2.jpg",
+  "look4.jpg",
+  "look5.jpg",
+  "11.jpg",
+  "looks3.jpg",  
+];
+
+let current = 0;
+const viewer = document.getElementById("viewer");
+
+function openGallery() {
+  current = 0;
+  document.getElementById("viewerImage").src = images[current];
+
+  viewer.style.visibility = "visible";
+  setTimeout(() => {
+    viewer.style.opacity = "1";
+  }, 10);
+}
+
+
+function closeGallery() {
+  viewer.style.opacity = "0";
+  setTimeout(() => {
+    viewer.style.visibility = "hidden";
+  }, 600);
+}
+
+function nextImage() {
+  current = (current + 1) % images.length;
+  document.getElementById("viewerImage").src = images[current];
+}
+
+function prevImage() {
+  current = (current - 1 + images.length) % images.length;
+  document.getElementById("viewerImage").src = images[current];
+}
+</script>
 
 </body>
-</html
+</html>
