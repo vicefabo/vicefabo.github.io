@@ -5,199 +5,269 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Page</title>
 
-<link href="https://fonts.cdnfonts.com/css/helvetica-neue-5" rel="stylesheet">
-
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
+  margin: 0;
   background: #000;
-  font-family: 'Helvetica Neue', sans-serif;
-  color: white;
-  overflow-x: hidden;
-}
-
-/* ===== GRID ===== */
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-  padding: 80px;
-}
-
-.box {
-  height: 480px;
-  background: #0a0a0a;
+  font-family: Helvetica, Arial, sans-serif;
   overflow: hidden;
+  color: white;
+}
+
+/* ===== COVERFLOW ===== */
+
+.wrapper {
   position: relative;
-  cursor: pointer;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: none;
+  transition: opacity 0.5s ease;
+}
+
+.coverflow {
+  display: flex;
+  gap: 25px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 0 35vw;
+}
+
+.coverflow::-webkit-scrollbar { display: none; }
+
+.card { 
+  flex: 0 0 260px;
+  height: 380px;
+  scroll-snap-align: center;
   transition: transform 0.4s ease, opacity 0.4s ease;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
 
-.box:hover {
-  transform: scale(1.015);
-  opacity: 0.9;
-}
-
-.box img {
+/* Default image cards */
+.card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* Coming Soon */
+/* Coverflow states */
+.card {
+  transform: scale(0.8);
+  opacity: 0.4;
+}
 
-.coming {
+.card.left {
+  transform: scale(0.85) translateX(-40px);
+  opacity: 0.6;
+}
+
+.card.right {
+  transform: scale(0.85) translateX(40px);
+  opacity: 0.6;
+}
+
+.card.active {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Coming Soon Style */
+.coming-card {
   display: flex;
   align-items: center;
   justify-content: center;
-  letter-spacing: 4px;
-  font-size: 13px;
-  background: #111;
+  border: 2px solid white;
+  font-size: 14px;
+  letter-spacing: 3px;
 }
 
-/* ===== VIEWER ===== */
+/* Arrows (Library) */
+.arrow {
+  position: absolute;
+  font-size: 40px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 5;
+}
+.left-arrow { left: 30px; }
+.right-arrow { right: 30px; }
 
-.viewer {
+/* ===== GALLERY VIEW ===== */
+
+.gallery-view {
   position: fixed;
   inset: 0;
-  background: #000;
+  background: black;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.6s ease;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
 }
 
-.viewer img {
-  max-width: 55%;
-  max-height: 75vh;
+.gallery-view.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.gallery-image {
+  width: 60%;
+  max-width: 700px;
+  height: 80%;
+}
+
+.gallery-image img {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
-/* BACK BUTTON */
-
-.back {
-  position: absolute;
-  top: 50px;
-  left: 60px;
-  font-size: 13px;
-  letter-spacing: 3px;
-  cursor: pointer;
-  opacity: 0.6;
-  transition: opacity 0.3s ease;
-}
-
-.back:hover {
-  opacity: 1;
-}
-
-/* ARROWS */
-
-.arrow {
+/* Centered gallery arrows */
+.gallery-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 42px;
+  font-size: 50px;
   cursor: pointer;
-  opacity: 0.4;
-  transition: opacity 0.3s ease;
   user-select: none;
 }
 
-.arrow:hover {
-  opacity: 1;
+.gallery-left { left: 40px; }
+.gallery-right { right: 40px; }
+
+.back-btn {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  font-size: 14px;
+  letter-spacing: 2px;
+  cursor: pointer;
 }
 
-.left {
-  left: 60px;
-}
-
-.right {
-  right: 60px;
+/* Mobile */
+@media (max-width: 768px) {
+  .card { flex: 0 0 220px; height: 320px; }
+  .gallery-image { width: 90%; height: 70%; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="grid">
+<!-- ===== LIBRARY ===== -->
 
-  <!-- OPENABLE GALLERY -->
-  <div class="box" onclick="openGallery()">
-    <img src="thumbnail1.jpg">
+<div class="wrapper" id="library">
+  <button class="arrow left-arrow">&#8249;</button>
+
+  <div class="coverflow" id="coverflow">
+
+    <!-- OPENABLE -->
+    <div class="card active openable">
+      <img src="thumbnail1.jpg">
+    </div>
+
+    <div class="card coming-card">COMING SOON</div>
+    <div class="card coming-card">COMING SOON</div>
+    <div class="card coming-card">COMING SOON</div>
+
   </div>
 
-  <!-- COMING SOON -->
-  <div class="box coming">COMING SOON</div>
-  <div class="box coming">COMING SOON</div>
-  <div class="box coming">COMING SOON</div>
-  <div class="box coming">COMING SOON</div>
-  <div class="box coming">COMING SOON</div>
-
+  <button class="arrow right-arrow">&#8250;</button>
 </div>
 
-<!-- FULL SCREEN VIEWER -->
 
-<div class="viewer" id="viewer">
+<div class="gallery-view" id="gallery">
+  <div class="back-btn" onclick="closeGallery()">BACK</div>
 
-  <div class="back" onclick="closeGallery()">BACK</div>
+  <div class="gallery-arrow gallery-left" onclick="prevImage()">&#8249;</div>
 
-  <div class="arrow left" onclick="prevImage()">‹</div>
+  <div class="gallery-image">
+    <img id="galleryImg" src="look1.jpg">
+  </div>
 
-  <img id="viewerImage" src="image1.jpg">
-
-
-  <div class="arrow right" onclick="nextImage()">›</div>
-
+  <div class="gallery-arrow gallery-right" onclick="nextImage()">&#8250;</div>
 </div>
 
 <script>
-let images = [
-  "look1.jpg",
-  "look2.jpg",
-  "look4.jpg",
-  "look5.jpg",
-  "11.jpg",
-  "looks3.jpg",  
-];
+const coverflow = document.getElementById("coverflow");
+const cards = document.querySelectorAll(".card");
+const library = document.getElementById("library");
+const gallery = document.getElementById("gallery");
 
-let current = 0;
-const viewer = document.getElementById("viewer");
+let index = 0;
+
+function updateCards() {
+  cards.forEach((card, i) => {
+    card.classList.remove("active", "left", "right");
+
+    if (i === index) card.classList.add("active");
+    else if (i < index) card.classList.add("left");
+    else card.classList.add("right");
+  });
+
+  cards[index].scrollIntoView({ behavior: "smooth", inline: "center" });
+}
+
+
+document.querySelector(".left-arrow").onclick = () => {
+  index = (index - 1 + cards.length) % cards.length;
+  updateCards();
+};
+
+document.querySelector(".right-arrow").onclick = () => {
+  index = (index + 1) % cards.length;
+  updateCards();
+};
+
+updateCards();
+
+/* ===== GALLERY ===== */
+
+const images = ["look1.jpg","look2.jpg","look4.jpg","look5.jpg","11.jpg"];
+let currentImage = 0;
 
 function openGallery() {
-  current = 0;
-  document.getElementById("viewerImage").src = images[current];
-
-  viewer.style.visibility = "visible";
+  library.style.opacity = "0";
   setTimeout(() => {
-    viewer.style.opacity = "1";
+    library.style.display = "none";
+    gallery.classList.add("active");
+  }, 500);
+}
+
+function closeGallery() {
+  gallery.classList.remove("active");
+  library.style.display = "flex";
+  setTimeout(() => {
+    library.style.opacity = "1";
   }, 10);
 }
 
-
-function closeGallery() {
-  viewer.style.opacity = "0";
-  setTimeout(() => {
-    viewer.style.visibility = "hidden";
-  }, 600);
-}
-
 function nextImage() {
-  current = (current + 1) % images.length;
-  document.getElementById("viewerImage").src = images[current];
+  currentImage = (currentImage + 1) % images.length;
+  document.getElementById("galleryImg").src = images[currentImage];
 }
 
 function prevImage() {
-  current = (current - 1 + images.length) % images.length;
-  document.getElementById("viewerImage").src = images[current];
+  currentImage = (currentImage - 1 + images.length) % images.length;
+  document.getElementById("galleryImg").src = images[currentImage];
 }
+
+/* Only open if active and openable */
+cards.forEach((card) => {
+  card.addEventListener("click", () => {
+    if (card.classList.contains("openable") && card.classList.contains("active")) {
+      openGallery();
+    }
+  });
+});
 </script>
 
 </body>
