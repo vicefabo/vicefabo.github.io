@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bully</title>
     <style>
-        /* Pure Black Background */
         body {
             margin: 0;
             display: flex;
@@ -15,25 +14,27 @@
             background-color: hsl(0, 0%, 100%); 
             font-family: sans-serif;
         }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
         .player-container {
             text-align: center;
+            animation: fadeIn 1.5s ease-in-out; 
         }
 
-        /* Sharp Edged Album Cover with Shadow */
         .album-cover {
             width: 350px;
             height: 350px;
             background-color: #111;
-            border-radius: 0; /* Sharp edges */
+            border-radius: 0; 
             object-fit: cover;
             display: block;
             margin-bottom: 50px;
-            /* Shadow effect: Horizontal 0, Vertical 20px, Blur 50px */
             box-shadow: 0 20px 50px rgba(0, 0, 0, 1), 0 10px 30px rgba(255, 255, 255, 0.05);
         }
 
-        /* Small, Minimal Button */
         .play-btn {
             background: none;
             border: none;
@@ -45,8 +46,7 @@
             outline: none;
             margin: 0 auto;
         }
-
-        /* State Toggling */
+        
         .pause-icon { display: none; }
         .playing .pause-icon { display: block; }
         .playing .play-icon { display: none; }
