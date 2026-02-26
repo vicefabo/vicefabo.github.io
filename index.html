@@ -22,65 +22,19 @@
             to { opacity: 1; }
         }
 
-        .container {
-            text-align: center;
-            width: 100%;
-            perspective: 1200px;
-        }
-
-        /* Login Section */
-        .login-box {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            align-items: center;
-            animation: fadeIn 1.5s ease-in-out;
-        }
-
-        input {
-            border: none;
-            border-bottom: 1px solid #ffffff;
-            padding: 12px;
-            width: 250px;
-            text-align: center;
-            outline: none;
-            font-size: 12px;
-            letter-spacing: 5px;
-            background: transparent;
-            text-transform: uppercase;
-            color: #ffffff;
-        }
-
-        #loginBtn {
-            background: transparent;
-            color: #ffffff;
-            border: 1px solid #ffffff;
-            padding: 10px 40px;
-            cursor: pointer;
-            font-size: 10px;
-            letter-spacing: 3px;
-        }
-
-        /* Gallery Section (Hidden until Login) */
-        #gallery-content {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            animation: fadeIn 1s forwards;
-        }
-
+        /* 1. Static Gallery Window (Magnetic Effect Removed) */
         .slider-window {
             width: 350px;
             height: 350px;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 0 50px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 60px rgba(255, 255, 255, 0.03);
+            /* No transform-style or transition for tilt needed */
         }
 
         .slider-track {
             display: flex;
-            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            width: 100%;
+            transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .slide {
@@ -89,31 +43,70 @@
             background-size: cover;
             background-position: center;
             background-color: #111;
-            transform-style: preserve-3d;
+            transition: filter 0.3s ease;
+            filter: brightness(0.8); /* Slightly dimmed by default */
         }
 
-        /* Navigation Arrows */
+        .slide:hover {
+            filter: brightness(1); /* Brightens on hover */
+        }
+
+        /* 2. Navigation Controls */
         .nav-controls {
-            margin-top: 40px;
+            margin-top: 50px;
             display: flex;
-            gap: 50px;
+            justify-content: center;
             align-items: center;
+            gap: 30px;
         }
 
         .arrow {
             background: none;
             border: none;
             color: white;
-            font-size: 24px;
+            font-size: 11px;
+            letter-spacing: 2px;
             cursor: pointer;
             padding: 10px;
             transition: opacity 0.3s;
             outline: none;
         }
 
-        .arrow:hover { opacity: 0.5; }
         .arrow:disabled { opacity: 0.1; cursor: default; }
 
+        .counter {
+            font-size: 10px;
+            letter-spacing: 3px;
+            opacity: 0.5;
+        }
+
+        /* Login Section */
+        #gallery-content { display: none; flex-direction: column; align-items: center; }
+        .login-box { display: flex; flex-direction: column; gap: 20px; align-items: center; }
+        
+        input { 
+            border: none; 
+            border-bottom: 1px solid #ffffff; 
+            padding: 12px; 
+            width: 250px; 
+            text-align: center; 
+            outline: none; 
+            font-size: 12px; 
+            letter-spacing: 5px; 
+            background: transparent; 
+            color: #ffffff; 
+            text-transform: uppercase; 
+        }
+
+        #loginBtn { 
+            background: transparent; 
+            color: #ffffff; 
+            border: 1px solid #ffffff; 
+            padding: 10px 40px; 
+            cursor: pointer; 
+            font-size: 10px; 
+            letter-spacing: 3px; 
+        }
     </style>
 </head>
 <body>
@@ -125,78 +118,64 @@
         </div>
 
         <div id="gallery-content">
-            <div class="slider-window" id="magneticWindow">
+            <div class="slider-window">
                 <div class="slider-track" id="track">
-                    <div class="slide" style="background-image: url('https://picsum.photos/id/237/200/300');"></div>
-                    <div class="slide" style="background-image: url('https://picsum.photos/id/237/200/300');"></div>
-                    <div class="slide" style="background-image: url('https://picsum.photos/id/237/200/300');"></div>
+                    <div class="slide" style="background-image: url('https://picsum.photos/200');"></div>
+                    <div class="slide" style="background-image: url('https://picsum.photos/200');"></div>
+                    <div class="slide" style="background-image: url('https://picsum.photos/200');"></div>
                 </div>
             </div>
 
             <div class="nav-controls">
-                <button class="arrow" id="prevBtn">←</button>
-                <button class="arrow" id="nextBtn">→</button>
+                <button class="arrow" id="prevBtn">PREV</button>
+                <span class="counter" id="counterDisplay">01 / 03</span>
+                <button class="arrow" id="nextBtn">NEXT</button>
             </div>
         </div>
     </div>
 
     <script>
+        const track = document.getElementById('track');
+        const counterDisplay = document.getElementById('counterDisplay');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
         const loginBtn = document.getElementById('loginBtn');
         const passInput = document.getElementById('passInput');
         const loginSection = document.getElementById('loginSection');
         const galleryContent = document.getElementById('gallery-content');
-        
-        const track = document.getElementById('track');
-        const windowEl = document.getElementById('magneticWindow');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
 
         let currentIndex = 0;
-        const totalSlides = 3; // Change this based on how many images you add
+        const totalSlides = 3; 
 
-        // Password Logic
         loginBtn.addEventListener('click', () => {
             if (passInput.value === 'vicefabo2.0') {
                 loginSection.style.display = 'none';
                 galleryContent.style.display = 'flex';
-            } else {
-                passInput.value = '';
-                passInput.style.borderBottomColor = 'red';
-                setTimeout(() => passInput.style.borderBottomColor = 'white', 500);
+                galleryContent.style.animation = 'fadeIn 1s forwards';
             }
         });
 
-        // Gallery Navigation
         function updateSlider() {
             track.style.transform = `translateX(-${currentIndex * 350}px)`;
+            counterDisplay.innerText = `0${currentIndex + 1} / 0${totalSlides}`;
             prevBtn.disabled = currentIndex === 0;
             nextBtn.disabled = currentIndex === totalSlides - 1;
         }
 
-        nextBtn.addEventListener('click', () => {
-            if (currentIndex < totalSlides - 1) {
-                currentIndex++;
-                updateSlider();
-            }
+        nextBtn.addEventListener('click', () => { 
+            if (currentIndex < totalSlides - 1) { 
+                currentIndex++; 
+                updateSlider(); 
+            } 
         });
 
-        prevBtn.addEventListener('click', () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateSlider();
-            }
+        prevBtn.addEventListener('click', () => { 
+            if (currentIndex > 0) { 
+                currentIndex--; 
+                updateSlider(); 
+            } 
         });
 
-        // Magnetic Tilt Effect on the Window
-        document.addEventListener('mousemove', (e) => {
-            if (galleryContent.style.display === 'flex') {
-                const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
-                const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
-                windowEl.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-            }
-        });
-
-        // Initial button state
         updateSlider();
     </script>
 </body>
