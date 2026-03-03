@@ -3,180 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ㅤ</title>
+    <title>‎ </title>
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            margin: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            overflow: hidden; 
+            opacity: 0;
+            animation: masterFade 3s ease-out forwards;
+        }
+
+        @keyframes masterFade { to { opacity: 1; } }
+
+        /* --- LOGO HEADER --- */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 160px; 
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background-color: #000000; 
-            font-family: 'Courier New', Courier, monospace;
-            overflow: hidden;
-            color: #ffffff;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            pointer-events: none;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        .header img { height: 85px; width: auto; }
 
-        /* 1. Static Gallery Window (Magnetic Effect Removed) */
-        .slider-window {
-            width: 350px;
-            height: 350px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 0 60px rgba(255, 255, 255, 0.03);
-            /* No transform-style or transition for tilt needed */
-        }
-
-        .slider-track {
+        /* --- SLIDESHOW CONTAINER --- */
+        .slideshow-wrapper {
             display: flex;
-            transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            width: 100vw;
+            height: 100vh;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth; 
+            -webkit-overflow-scrolling: touch;
+            gap: 40px; 
+            padding: 0 10vw; 
         }
 
         .slide {
-            min-width: 350px;
-            height: 350px;
-            background-size: cover;
-            background-position: center;
-            background-color: #111;
-            transition: filter 0.3s ease;
-            filter: brightness(0.8); /* Slightly dimmed by default */
-        }
-
-        .slide:hover {
-            filter: brightness(1); /* Brightens on hover */
-        }
-
-        /* 2. Navigation Controls */
-        .nav-controls {
-            margin-top: 50px;
+            flex: 0 0 80vw; 
+            height: 100vh;
+            scroll-snap-align: center;
             display: flex;
-            justify-content: center;
             align-items: center;
-            gap: 30px;
+            justify-content: center;
         }
 
-        .arrow {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 11px;
-            letter-spacing: 2px;
-            cursor: pointer;
-            padding: 10px;
-            transition: opacity 0.3s;
-            outline: none;
+        video {
+            height: 65vh; 
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+            box-shadow: 0 30px 100px rgba(25, 24, 24, 0.789);
         }
 
-        .arrow:disabled { opacity: 0.1; cursor: default; }
-
-        .counter {
-            font-size: 10px;
-            letter-spacing: 3px;
-            opacity: 0.5;
-        }
-
-        /* Login Section */
-        #gallery-content { display: none; flex-direction: column; align-items: center; }
-        .login-box { display: flex; flex-direction: column; gap: 20px; align-items: center; }
-        
-        input { 
-            border: none; 
-            border-bottom: 1px solid #ffffff; 
-            padding: 12px; 
-            width: 250px; 
-            text-align: center; 
-            outline: none; 
-            font-size: 12px; 
-            letter-spacing: 5px; 
-            background: transparent; 
-            color: #ffffff; 
-            text-transform: uppercase; 
-        }
-
-        #loginBtn { 
-            background: transparent; 
-            color: #ffffff; 
-            border: 1px solid #ffffff; 
-            padding: 10px 40px; 
-            cursor: pointer; 
-            font-size: 10px; 
-            letter-spacing: 3px; 
-        }
+        /* Hide scrollbars */
+        .slideshow-wrapper::-webkit-scrollbar { display: none; }
+        .slideshow-wrapper { scrollbar-width: none; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="login-box" id="loginSection">
-            <input type="password" id="passInput" placeholder="ENTER ACCESS KEY">
-            <button id="loginBtn">VIEW</button>
-        </div>
 
-        <div id="gallery-content">
-            <div class="slider-window">
-                <div class="slider-track" id="track">
-                    <div class="slide" style="background-image: url('https://picsum.photos/200');"></div>
-                    <div class="slide" style="background-image: url('https://picsum.photos/200');"></div>
-                    <div class="slide" style="background-image: url('https://picsum.photos/200');"></div>
-                </div>
-            </div>
-
-            <div class="nav-controls">
-                <button class="arrow" id="prevBtn">PREV</button>
-                <span class="counter" id="counterDisplay">01 / 03</span>
-                <button class="arrow" id="nextBtn">NEXT</button>
-            </div>
-        </div>
-    </div>
+    <main class="slideshow-wrapper" id="slideshow">
+        </main>
 
     <script>
-        const track = document.getElementById('track');
-        const counterDisplay = document.getElementById('counterDisplay');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const loginBtn = document.getElementById('loginBtn');
-        const passInput = document.getElementById('passInput');
-        const loginSection = document.getElementById('loginSection');
-        const galleryContent = document.getElementById('gallery-content');
+        const slideshow = document.getElementById('slideshow');
+        const totalVideos = 83;
 
-        let currentIndex = 0;
-        const totalSlides = 3; 
+        const createSlide = (fileName) => {
+            const slide = document.createElement('div');
+            slide.className = 'slide';
+            slide.innerHTML = `
+                <video autoplay muted loop playsinline>
+                    <source src="${fileName}" type="video/mp4">
+                </video>
+            `;
+            slideshow.appendChild(slide);
+        };
 
-        loginBtn.addEventListener('click', () => {
-            if (passInput.value === 'vicefabo2.0') {
-                loginSection.style.display = 'none';
-                galleryContent.style.display = 'flex';
-                galleryContent.style.animation = 'fadeIn 1s forwards';
-            }
-        });
-
-        function updateSlider() {
-            track.style.transform = `translateX(-${currentIndex * 350}px)`;
-            counterDisplay.innerText = `0${currentIndex + 1} / 0${totalSlides}`;
-            prevBtn.disabled = currentIndex === 0;
-            nextBtn.disabled = currentIndex === totalSlides - 1;
+        for (let i = 1; i <= totalVideos; i++) {
+            createSlide(`${i}.mp4`);
+            if (i === 28) createSlide('m.mp4');
         }
 
-        nextBtn.addEventListener('click', () => { 
-            if (currentIndex < totalSlides - 1) { 
-                currentIndex++; 
-                updateSlider(); 
-            } 
-        });
+        // --- ARROW KEY LOGIC ---
+        window.addEventListener('keydown', (e) => {
+            // Width of one slide plus the gap
+            const slideWidth = slideshow.querySelector('.slide').clientWidth + 40;
 
-        prevBtn.addEventListener('click', () => { 
-            if (currentIndex > 0) { 
-                currentIndex--; 
-                updateSlider(); 
+            if (e.key === 'ArrowRight') {
+                slideshow.scrollBy({ left: slideWidth, behavior: 'smooth' });
             } 
+            else if (e.key === 'ArrowLeft') {
+                slideshow.scrollBy({ left: -slideWidth, behavior: 'smooth' });
+            }
         });
-
-        updateSlider();
     </script>
+
 </body>
 </html>
